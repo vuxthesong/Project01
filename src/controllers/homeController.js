@@ -1,5 +1,5 @@
 import db from "../models/index";
-import CURDSevice from "../services/CURDSevice";
+import CURDService from "../services/CURDService";
 
 let getHomePage = async (req, res) => {
   try {
@@ -15,12 +15,25 @@ let getCRUD = (req, res) => {
 };
 
 let postCRUD = async (req, res) => {
-  await CURDSevice.createNewUser(req.body);
+  let mess = await CURDService.createNewUser(req.body);
+  console.log(mess);
   return res.send("post CRUD");
+};
+
+let displayGetCRUD = async (req, res) => {
+  let data = await CURDService.getAllUser();
+  console.log("---------------");
+  console.log(data);
+  console.log("---------------");
+
+  return res.render("displayCRUD.ejs", {
+    data: data,
+  });
 };
 
 module.exports = {
   getHomePage: getHomePage,
   getCRUD: getCRUD,
   postCRUD: postCRUD,
+  displayGetCRUD: displayGetCRUD,
 };
