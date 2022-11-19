@@ -1,5 +1,5 @@
 import db from "../models/index";
-import CURDService from "../services/CURDService";
+import CRUDService from "../services/CRUDService";
 
 let getHomePage = async (req, res) => {
   try {
@@ -15,13 +15,13 @@ let getCRUD = (req, res) => {
 };
 
 let postCRUD = async (req, res) => {
-  let mess = await CURDService.createNewUser(req.body);
+  let mess = await CRUDService.createNewUser(req.body);
   console.log(mess);
   return res.send("post CRUD");
 };
 
 let displayGetCRUD = async (req, res) => {
-  let data = await CURDService.getAllUser();
+  let data = await CRUDService.getAllUser();
   console.log("---------------");
   console.log(data);
   console.log("---------------");
@@ -31,9 +31,29 @@ let displayGetCRUD = async (req, res) => {
   });
 };
 
+let getEditCRUD = async (req, res) => {
+  let userId = req.query.id;
+  if (userId) {
+    let userData = await CRUDService.getUserById(userId);
+    return res.render("editCRUD.ejs", {
+      userData: userData,
+    });
+  } else return res.send("User not found");
+};
+
+let updateCRUD = async (req, res) => {
+  let data = req.body;
+  let allUser = await CRUDService.updateUser(data);
+  return res.render("displayCRUD.ejs", {
+    data: allUser,
+  });
+};
+
 module.exports = {
   getHomePage: getHomePage,
   getCRUD: getCRUD,
   postCRUD: postCRUD,
   displayGetCRUD: displayGetCRUD,
+  getEditCRUD: getEditCRUD,
+  updateCRUD: updateCRUD,
 };
