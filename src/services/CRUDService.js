@@ -16,7 +16,10 @@ let createNewUser = async (data) => {
         gender: data.gender === "1" ? true : false,
         roleId: data.roleId,
       });
-      resolve("OK create a new user");
+      let getAllUser = await db.User.findAll({
+        raw: true,
+      });
+      resolve(getAllUser);
     } catch (error) {
       reject(error);
     }
@@ -91,9 +94,31 @@ let updateUser = (data) => {
   });
 };
 
+let deleteUserById = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { id: id },
+      });
+      if (user) {
+        await user.destroy();
+        let getAllUser = await db.User.findAll({
+          raw: true,
+        });
+        resolve(getAllUser);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   createNewUser: createNewUser,
   getAllUser: getAllUser,
   getUserById: getUserById,
   updateUser: updateUser,
+  deleteUserById: deleteUserById,
 };
