@@ -6,9 +6,10 @@ dotenv.config();
 import viewEnginer from "./config/viewEnginer";
 import initWebRoutes from "./route/web";
 import connectBD from "./config/connectBD";
+import cors from "cors";
 
 let app = express();
-
+app.use(cors({ credentials: true, origin: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
